@@ -1,0 +1,61 @@
+CREATE (e:ENTREPRISE {nom: "a-SIS" , secteur_activite:"Logistique", description:"Editeur de Logiciels", taille:240})
+CREATE (e:ENTREPRISE {nom: "SEFRAM" , secteur_activite:"Numérique", description:"Vendeur d'outils", taille:80})
+CREATE (e:ENTREPRISE {nom: "Auchan" , secteur_activite:"Nourriture", description:"Super et HyperMarchés", taille:2000})
+CREATE (e:ENTREPRISE {nom: "Haullote" , secteur_activite:"Ingénieurie Industrielle", description:"Vente de Nasselles elevatrices", taille:2000})
+
+
+CREATE (u:UTILISATEUR {nom: "CRUZILLE" , prenom:"Thibaud", description:"Ingénieur informaticien", competence:"informatique", competence:"gestion de projet", competence:"commercial"})
+CREATE (u:UTILISATEUR {nom: "MOULAIRE" , prenom:"Remy", description:"Ingénieur informaticien", competence:"informatique", competence:"gestion de projet", competence:"base de donnees"})
+CREATE (u:UTILISATEUR {nom: "VEGAS" , prenom:"Victoria", description:"Ingénieur informaticien", competence:"informatique", competence:"Data", competence:"Anglais"})
+CREATE (u:UTILISATEUR {nom: "MAY" , prenom:"Adrian", description:"Ingénieur informaticien", competence:"informatique", competence:"Russe", competence:"Allemand", competence:"Directeur"})
+
+MATCH (e:ENTREPRISE),(u:UTILISATEUR)
+WHERE e.nom = "a-SIS" AND u.nom = "CRUZILLE"
+CREATE (u)-[r:ATravaillePour { Debut: datetime("2016-01-01T00:00:00.120+05:30"), Fin: datetime("2019-12-31T23:59:59.120+05:30"), EnTantQue: "Apprenti" }]->(e)
+
+MATCH (e:ENTREPRISE),(u:UTILISATEUR)
+WHERE e.nom = "SEFRAM" AND u.nom = "CRUZILLE"
+CREATE (u)-[r:ATravaillePour { Debut: datetime("2015-08-01T00:00:00.120+05:30"), Fin: datetime("2015-12-31T23:59:59.120+05:30"), EnTantQue: "Stagiaire" }]->(e)
+
+MATCH (e:ENTREPRISE),(u:UTILISATEUR)
+WHERE e.nom = "Auchan" AND u.nom = "VEGAS"
+CREATE (u)-[r:ATravaillePour { Debut: datetime("2018-09-01T00:00:00.120+05:30"), Fin: datetime("2021-12-31T23:59:59.120+05:30"), EnTantQue: "Apprenti" }]->(e)
+
+MATCH (e:ENTREPRISE),(u:UTILISATEUR)
+WHERE e.nom = "Auchan" AND u.nom = "MAY"
+CREATE (u)-[r:ATravaillePour { Debut: datetime("2018-09-01T00:00:00.120+05:30"), Fin: datetime("2021-12-31T23:59:59.120+05:30"), EnTantQue: "Apprenti" }]->(e)
+
+MATCH (u1:UTILISATEUR),(u2:UTILISATEUR)
+WHERE u1.nom = "VEGAS" AND u2.nom = "MAY"
+CREATE (u1)-[a:ATravailleAvec ]->(u2)
+return u1, u2;
+
+MATCH (u1:UTILISATEUR),(u2:UTILISATEUR)
+WHERE u1.nom = "CRUZILLE" AND u2.nom = "MAY"
+CREATE (u1)-[c:Connait ]->(u2)
+return u1, u2;
+
+MATCH (u1:UTILISATEUR),(u2:UTILISATEUR)
+WHERE u1.nom = "CRUZILLE" AND u2.nom = "MAY"
+CREATE (u1)-[c:Connait ]->(u2)
+return u1, u2;
+
+MATCH (u1:UTILISATEUR),(u2:UTILISATEUR)
+WHERE u1.nom = "MAY" AND u2.nom = "VEGAS"
+CREATE (u1)-[c:Connait ]->(u2)
+return u1, u2;
+
+MATCH (u:UTILISATEUR) 
+WHERE u.nom =~ '.*LAIRE.*'
+RETURN u.nom;
+
+
+MATCH (e:ENTREPRISE) 
+WHERE e.nom =~ '.*SIS.*'
+RETURN e.nom;
+
+
+CREATE INDEX ON : ENTREPRISE(nom);
+CREATE INDEX ON : UTILISATEUR(nom);
+
+	
